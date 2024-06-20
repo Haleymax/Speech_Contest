@@ -12,6 +12,8 @@
 #include "vector"
 #include "speaker.h"
 #include "map"
+#include "algorithm"
+#include "ctime"
 
 using namespace std;
 
@@ -37,6 +39,14 @@ public:
     //初始创建12名选手
     void createSpeaker();
 
+    //比赛流程
+    void startSpeech();
+
+    //抽签
+    void speechDraw();
+
+    //比赛
+    void speechContest();
 
 public:
     //选手容器

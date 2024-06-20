@@ -71,4 +71,51 @@ void SpeechManager::createSpeaker() {
         //将选手和编号放入map中
         this->m_Speaker.insert(make_pair(id , sp));
     }
+
+}
+
+//抽签
+void SpeechManager::speechDraw() {
+    cout << "第 << " << this->m_Index << " >> 轮比赛选手正在抽签 " << endl;
+    cout << "---------------------------" << endl;
+    cout << "抽签后演讲顺序如下 : " << endl;
+    if (this->m_Index == 1){  //第一轮
+        //打乱选手顺序
+        random_shuffle(v1.begin(),v1.end());
+        for (vector<int>::iterator it = v1.begin() ; it != v1.end() ; it++) {
+            cout << *it << " : "<< this->m_Speaker[*it].getName() << " ";
+        }
+        cout << endl;
+    } else{  //第二轮的就是晋级的选手
+        random_shuffle(v2.begin(),v2.end());
+        for (vector<int>::iterator it = v2.begin() ; it != v2.end() ; it++) {
+            cout << *it << " : "<< this->m_Speaker[*it].getName() << " ";
+        }
+        cout << endl;
+    }
+
+    cout << "----------------------------" << endl;
+    system("pause");
+    cout << endl;
+}
+
+//比赛
+void SpeechManager::speechContest() {
+    cout << "-----------第"<<this->m_Index << "轮正式比赛开始:----------------"<< endl;
+    multimap<double , int , greater<int> > groupScore; //临时容器，存放选手编号和分数   谓词：内建访函数从大到小
+
+    int num = 0;
+
+    vector <int>v_Src;   //比赛人员容器
+    if (this->m_Index == 1){
+        v_Src = v1;
+    } else{
+        v_Src = v2;
+    }
+}
+
+
+//比赛流程
+void SpeechManager::startSpeech() {
+    this->speechDraw();
 }
