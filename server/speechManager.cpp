@@ -13,11 +13,21 @@ SpeechManager::SpeechManager() {
     //创建选手
     this->createSpeaker();
 
+    //获取往届记录
+    this->loadRecord();
+
 }
 
 //析构函数
 SpeechManager::~SpeechManager() {
 
+}
+
+//退出比赛
+void SpeechManager::exitSystem() {
+    cout << "欢迎下次使用" <<endl;
+    system("pause");
+    exit(0);
 }
 
 //显示菜单
@@ -32,12 +42,6 @@ void SpeechManager::show_Menu() {
     cout << endl;
 }
 
-//退出功能
-void SpeechManager::exitSystem() {
-    cout << "欢迎下次使用" << endl;
-    system("pause");
-    exit(EXIT_SUCCESS);
-}
 
 //初始化属性
 void SpeechManager::initSpeach() {
@@ -168,7 +172,35 @@ void SpeechManager::speechContest() {
 
 //比赛流程
 void SpeechManager::startSpeech() {
+
+    //抽签
     this->speechDraw();
+
+    //比赛
+    speechContest();
+
+    //显示晋级结果
+    this->showScore();
+
+    //第二轮比赛
+    this->m_Index++;
+
+    //第二轮抽签
+    speechDraw();
+
+    //比赛
+    speechContest();
+
+    //显示最终结果
+    showScore();
+
+    //保存分数
+    saveRecord();
+
+    cout << "本届比赛完毕 !" << endl;
+    system("pause");
+    system("cls");
+
 }
 
 //显示比赛结果
@@ -192,4 +224,78 @@ void SpeechManager::showScore() {
     system("cls");
     this->show_Menu();
 
+}
+
+void SpeechManager::saveRecord() {
+    ofstream ofs;
+    ofs.open("speech.csv" , ios::out | ios::app);
+
+    //将每个人的数据写入到文件中
+    for (vector<int>::iterator it = vVictory.begin() ; it != vVictory.end() ; it++) {
+        ofs << *it << ","
+            << m_Speaker[*it].getScore(1) <<",";
+    }
+    ofs << endl;
+    ofs.close();
+
+    cout << "记录已经保存" << endl;
+}
+
+void SpeechManager::loadRecord() {
+    ifstream ifs("speech.csv",ios::in);
+
+    if (!ifs.is_open()){
+        this->fileIsEmpty = true;
+        cout << "文件不存在" << endl;
+        ifs.close();
+    }
+
+    char ch;
+    ifs >> ch;
+    if (ifs.eof()){
+        cout << "文件为空!" << endl;
+        this->fileIsEmpty = true;
+        ifs.close();
+        return;
+    }
+
+    //文件不为空
+    this->fileIsEmpty = false;
+
+    ifs.putback(ch);  //把刚刚取出来的那个字串放回去
+
+    string data;
+    int index = 0;
+    while (ifs >> data){
+        vector<string > v;
+        int pos = -1;
+        int start = 0;
+
+        while (true){
+            pos = data.find(",",start);  //第一次从0开始找
+            if (pos == -1){
+                break;
+            }
+            string tmp = data.substr(start , pos - start);  //pos - start就是表示要取的这个字符串长度（结尾减去开头）
+
+            v.push_back(tmp);
+            start = pos + 1;
+        }
+
+        this->m_Record.insert(make_pair(index,v));
+        index++;
+    }
+    ifs.close();
+}
+
+void SpeechManager::showRecord() {
+    for (int i = 0; i < this->m_Record.size(); i++)
+    {
+        cout << "第" << i + 1 << "届 " <<
+             "冠军编号：" << this->m_Record[i][0] << " 得分：" << this->m_Record[i][1] << " "
+             "亚军编号：" << this->m_Record[i][2] << " 得分：" << this->m_Record[i][3] << " "
+             "季军编号：" << this->m_Record[i][4] << " 得分：" << this->m_Record[i][5] << endl;
+    }
+    system("pause");
+    system("cls");
 }

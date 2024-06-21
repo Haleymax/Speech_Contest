@@ -17,6 +17,7 @@
 #include "deque"
 #include "algorithm"
 #include "numeric"
+#include "fstream"
 
 using namespace std;
 
@@ -54,6 +55,15 @@ public:
     //显示比赛结果
     void showScore();
 
+    //保存记录
+    void saveRecord();
+
+    //读取记录
+    void loadRecord();
+
+    //显示往届得分
+    void showRecord();
+
 public:
     //选手容器
     vector<int> v1;
@@ -69,6 +79,12 @@ public:
 
     //比赛轮次
     int m_Index = 1;
+
+    //文件为空的标志
+    bool fileIsEmpty;
+
+    //往届记录
+    map<int,vector<string>> m_Record;
 
 };
 
