@@ -4,12 +4,12 @@
 int main() {
     SpeechManager sm;
 
-    for (map<int, Speaker>::iterator it = sm.m_Speaker.begin(); it != sm.m_Speaker.end(); it++)
+    /*for (map<int, Speaker>::iterator it = sm.m_Speaker.begin(); it != sm.m_Speaker.end(); it++)
     {
         cout  << "选手编号：" << it->first
               << " 姓名： " << it->second.getName()
               << " 成绩： " << it->second.getScore(0) << endl;
-    }
+    }*/
     int choice = 0; //用来存储用户的选项
 
     while (true)
@@ -25,10 +25,12 @@ int main() {
                 sm.startSpeech();
                 break;
             case 2:  //查看记录
+                sm.showRecord();
                 break;
             case 3:  //清空记录
                 break;
             case 0:  //退出系统
+                sm.exitSystem();
                 break;
             default:
                 system("cls"); //清屏
