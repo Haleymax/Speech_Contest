@@ -112,10 +112,84 @@ void SpeechManager::speechContest() {
     } else{
         v_Src = v2;
     }
+
+    //遍历所有参赛选手
+    for(vector<int>::iterator it = v_Src.begin() ; it != v_Src.end() ; it++){
+        num++;
+
+        //评委打分
+        deque<double> d;
+        for (int i = 0; i < 10; ++i) {
+            double score = (rand()%401 + 600) / 10.f;
+            d.push_back(score);
+        }
+
+        sort(d.begin(),d.end(),greater<double>());  //对十个评委的打分进行排序
+        d.pop_front();  //去掉最高分
+        d.pop_back();   //去掉最低分
+
+        double sum = accumulate(d.begin(),d.end(),0.0f);  //计算总分
+        double avg = sum / (double)d.size();        //计算平均分
+
+        this->m_Speaker[*it].setScore(this->m_Index - 1,avg);
+
+        //六个人一组用临时容器进行保存
+        groupScore.insert(make_pair(avg,*it));
+        if (num % 6 == 0){   //表示的是第一轮
+            cout << "第" << num / 6 << "小组比赛名次: "<<endl;
+            for (multimap<double,int,greater<int>>::iterator it = groupScore.begin() ; it != groupScore.end() ; it++) {
+                cout << "编号 :" << it->second
+                     << "姓名 :" << this->m_Speaker[it->second].getName()
+                     << "成绩 :" << this->m_Speaker[it->second].getScore(this->m_Index - 1)
+                     << endl;
+            }
+
+            int count = 0;
+
+            //取前三名
+            for (multimap<double,int,greater<int>>::iterator it = groupScore.begin() ; it != groupScore.end() && count < 3 ;
+            it++ ,count++) {
+                if (this->m_Index == 1){
+                    v2.push_back((*it).second);
+                } else{
+                    vVictory.push_back((*it).second);  //第二轮的前三名就是获胜的人
+                }
+            }
+
+            groupScore.clear();
+
+            cout << endl;
+        }
+    }
+    cout << "-----------------------第" << this->m_Index << "轮比赛完毕  -------------------" << endl;
+    system("pause");
 }
 
 
 //比赛流程
 void SpeechManager::startSpeech() {
     this->speechDraw();
+}
+
+//显示比赛结果
+void SpeechManager::showScore() {
+    cout << "------------第" << this->m_Index << "轮晋级选手信息如下：--------------" << endl;
+
+    vector<int> v;
+    if (this->m_Index == 1){
+        v = v2;  //第一轮晋级选手的容器
+    } else{
+        v = vVictory;   //获奖者的容器
+    }
+
+    for (vector<int>::iterator it = v.begin() ; it != v.end() ; it++) {
+        cout << "选手编号 : " << *it << "姓名 : " << m_Speaker[*it].getName()
+        << "得分 : "<< m_Speaker[*it].getScore(this->m_Index-1);
+    }
+    cout << endl;
+
+    system("pause");
+    system("cls");
+    this->show_Menu();
+
 }

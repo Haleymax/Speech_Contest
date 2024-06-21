@@ -14,6 +14,9 @@
 #include "map"
 #include "algorithm"
 #include "ctime"
+#include "deque"
+#include "algorithm"
+#include "numeric"
 
 using namespace std;
 
@@ -47,6 +50,9 @@ public:
 
     //比赛
     void speechContest();
+
+    //显示比赛结果
+    void showScore();
 
 public:
     //选手容器
