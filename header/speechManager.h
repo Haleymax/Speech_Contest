@@ -64,6 +64,9 @@ public:
     //显示往届得分
     void showRecord();
 
+    //清空记录
+    void clearRecord();
+
 public:
     //选手容器
     vector<int> v1;

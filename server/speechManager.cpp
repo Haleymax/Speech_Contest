@@ -50,7 +50,11 @@ void SpeechManager::initSpeach() {
     this->vVictory.clear();
     this->m_Speaker.clear();
 
+    //比赛轮数
     this->m_Index = 1;
+
+    //初始化记录容器
+    this->m_Record.clear();
 }
 
 //创建12名选手
@@ -197,6 +201,13 @@ void SpeechManager::startSpeech() {
     //保存分数
     saveRecord();
 
+    //重置比赛
+    this->initSpeach();
+    //创建选手
+    this->createSpeaker();
+    //获取往届记录
+    this->loadRecord();
+
     cout << "本届比赛完毕 !" << endl;
     system("pause");
     system("cls");
@@ -239,6 +250,9 @@ void SpeechManager::saveRecord() {
     ofs.close();
 
     cout << "记录已经保存" << endl;
+
+    //有记录了，文件不为空
+    this->fileIsEmpty = false;
 }
 
 void SpeechManager::loadRecord() {
@@ -298,4 +312,32 @@ void SpeechManager::showRecord() {
     }
     system("pause");
     system("cls");
+}
+
+void SpeechManager::clearRecord(){
+    cout << "确认清空?" << endl;
+    cout << "1.确认" << endl;
+    cout << "2.返回" << endl;
+
+    int select = 0;
+    cin >> select;
+    if (select == 1){
+        //打开模式 ios::trunc  如果存在删除文件并重新创建
+        ofstream ofs("speech.csv" , ios::trunc);
+        ofs.close();
+
+        //初始化属性
+        this->initSpeach();
+
+        //创建选手
+        this->createSpeaker();
+
+        //获取往届记录
+        this->loadRecord();
+
+        cout << "清空成功!" << endl;
+    }
+    system("pause");
+    system("cls");
+
 }
