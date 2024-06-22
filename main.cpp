@@ -1,7 +1,10 @@
 #include <iostream>
+#include "ctime"
 #include "server/speechManager.cpp"
 
 int main() {
+
+    srand((unsigned int)time(NULL));
     SpeechManager sm;
 
     /*for (map<int, Speaker>::iterator it = sm.m_Speaker.begin(); it != sm.m_Speaker.end(); it++)
@@ -28,6 +31,7 @@ int main() {
                 sm.showRecord();
                 break;
             case 3:  //清空记录
+                sm.clearRecord();
                 break;
             case 0:  //退出系统
                 sm.exitSystem();
